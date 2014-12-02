@@ -3,6 +3,16 @@
 require 'yaml'
 require 'stringex/localization'
 
+
+LATIN_RANGES = [0..0x2FF, 0x1D00..0x1DBF, 0x1E00..0x1EFF, 0x2070..0x209F, 0x2100..0x218F, 0x2C60..0x2C7F, 0xA720..0xA7FF, 0xAB30..0xAB6F, 0xFB00..0xFB4F, 0xFF00..0xFFEF]
+
+def charlatin(ch)
+  LATIN_RANGES.each do |subrange|
+    return true if subrange.cover?(ch.unpack('U*0')[0])
+  end
+  return false
+end
+
 module Stringex
   module Unidecoder
     # Contains Unicode codepoints, loading as needed from YAML files
@@ -38,7 +48,11 @@ module Stringex
     private
 
       def decoded(character)
-        localized(character) || from_yaml(character)
+        if charlatin(character)
+          localized(character) || from_yaml(character)
+        else
+          character
+        end
       end
 
       def localized(character)
