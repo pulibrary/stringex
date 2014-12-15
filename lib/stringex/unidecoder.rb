@@ -4,30 +4,27 @@ require 'yaml'
 require 'stringex/localization'
 
 
-  # LATIN SCRIPT UNICODE RANGES
+  # NORMALIZE SCRIPT UNICODE RANGES
   #########################################################
+    ##### LATIN #####
     # Basic Latin, 0000–007F. This block corresponds to ASCII.
     # Latin-1 Supplement, 0080–00FF
     # Latin Extended-A, 0100–017F
     # Latin Extended-B, 0180–024F
-    # IPA Extensions, 0250–02AF
-    # Spacing Modifier Letters, 02B0–02FF
-    # Phonetic Extensions, 1D00–1D7F
-    # Phonetic Extensions Supplement, 1D80–1DBF
     # Latin Extended Additional, 1E00–1EFF
-    # Superscripts and Subscripts, 2070-209F
-    # Letterlike Symbols, 2100–214F
-    # Number Forms, 2150–218F
-    # Latin Extended-C, 2C60–2C7F
-    # Latin Extended-D, A720–A7FF
-    # Latin Extended-E, AB30–AB6F
-    # Alphabetic Presentation Forms (Latin ligatures) FB00–FB4F
-    # Halfwidth and Fullwidth Forms (fullwidth Latin letters) FF00–FFEF
+    # Alphabetic Presentation Forms (Latin ligatures) FB00–FB06
+    # Halfwidth and Fullwidth Forms (fullwidth Latin letters) FF00–FF5E
+    ##### OTHER SCRIPTS #####
+    # Combining Diacritical Marks, 0300-036F
+    # Greek, 0384-03CE
+    # Cyrillic, 0400-045F
+    # Armenian, 0531-0587
 
-LATIN_RANGES = [0..0x2FF, 0x1D00..0x1DBF, 0x1E00..0x1EFF, 0x2070..0x209F, 0x2100..0x218F, 0x2C60..0x2C7F, 0xA720..0xA7FF, 0xAB30..0xAB6F, 0xFB00..0xFB4F, 0xFF00..0xFFEF]
 
-def charlatin(ch)
-  LATIN_RANGES.each do |subrange|
+NORMALIZE_RANGES = [0..0x24F, 0x1E00..0x1EFF, 0xFB00..0xFB06, 0xFF00..0xFF5E, 0x0300..0x036F, 0x0384..0x03CE, 0x0400..0x045F, 0x0531..0x0587]
+
+def charnorm(ch)
+  NORMALIZE_RANGES.each do |subrange|
     return true if subrange.cover?(ch.unpack('U*0')[0])
   end
   return false
@@ -68,7 +65,7 @@ module Stringex
     private
 
       def decoded(character)
-        if charlatin(character)
+        if charnorm(character)
           localized(character) || from_yaml(character)
         else
           character
