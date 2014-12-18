@@ -143,7 +143,7 @@ module Stringex
 
 
       def normalize_em
-        gsub('—', ' ').
+        gsub(/—/, ' ').
           gsub(/[\p{P}\p{S}]/, '').
           remove_formatting.
           downcase
