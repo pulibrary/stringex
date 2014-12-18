@@ -135,6 +135,20 @@ module Stringex
           collapse
       end
 
+      def normalize
+        gsub(/[\p{P}\p{S}]/, '').
+          remove_formatting.
+          downcase
+      end
+
+
+      def normalize_em
+        gsub('—', ' ').
+          gsub(/[\p{P}\p{S}]/, '').
+          remove_formatting.
+          downcase
+      end
+
       # Replace runs of whitespace in string. Defaults to a single space but any replacement
       # string may be specified as an argument. Examples:
       #
