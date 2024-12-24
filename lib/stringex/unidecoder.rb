@@ -25,7 +25,7 @@ NORMALIZE_RANGES = [0..0x24F, 0x1E00..0x1EFF, 0xFB00..0xFB06, 0xFF00..0xFF5E, 0x
 
 def charnorm(ch)
   NORMALIZE_RANGES.each do |subrange|
-    return true if subrange.cover?(ch.unpack('U*0')[0])
+    return true if subrange.cover?(ch.unpack('U*')[0])
   end
   return false
 end
